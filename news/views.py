@@ -19,7 +19,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
 @api_view(['GET'])
 def article_by_category(request):
     if request.method == 'GET':
-        category_id = request.GET.get("category")
-        articles = Article.objects.filter(category_id=category_id)
-        return Response(data=ArticleSerializer(articles).data,
+        category_from_brower = request.GET.get("categorys")
+        articles = Article.objects.filter(category_id=category_from_brower)
+        return Response(data=ArticleSerializer(articles, many=True).data,
                         status=status.HTTP_200_OK)
