@@ -1,8 +1,18 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
+from rest_framework.routers import SimpleRouter
 
-from . import views
+from news.models import Article
+from news.views import *
+
+router = SimpleRouter()
+
+router.register('category', CategoryViewSet, 'UserViewSet')
+router.register('article', ArticleViewSet, 'TeamViewSet')
+
 
 urlpatterns = [
-   url(r'^$', views.index, name='index'),
-   url(r'^(?P<cat_id>[0-9]+)/$', views.detail, name='index'),
+    # url('', include(router.urls), name='router'),
+    url(r'^api/', include(router.urls), name='api'),
+    url(r'^article/', article_by_category, name='old'),
+
 ]

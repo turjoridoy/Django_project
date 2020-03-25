@@ -1,16 +1,25 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from .models import Category
+from rest_framework import viewsets, status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+from news.models import Category, Article
+from news.serializer import CategorySerializer, ArticleSerializer
 
 
-def index(request):
-    all_cat = Category.objects.all()
-    html = ''
-    for cat in all_cat:
-        url = '/news/' +str(cat.id)+ '/'
-        html += '<a href="'+url+'"> '+cat.cat_name+'</a></br>'
-    return HttpResponse(html)
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
 
-def detail(request, cat_id):
-    return HttpResponse("<h1>Hello, " +str(cat_id)+" </h1>")
+class ArticleViewSet(viewsets.ModelViewSet):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+
+
+@api_view(['GET'])
+def article_by_category(request):
+    if request.method == 'GET':
+        category_id = request.GET.get("category")
+        articles = Article.objects.filter(category_id=category_id)
+        return Response(data=ArticleSerializer(articles).data,
+                        status=status.HTTP_200_OK)
