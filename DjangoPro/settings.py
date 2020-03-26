@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'news.apps.MyproConfig',
+    'scraper.apps.ScraperConfig',
     'rest_framework',
 ]
 
